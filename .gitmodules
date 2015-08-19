@@ -1,3 +1,4 @@
 [submodule "spark_workshop"]
 	path = spark_workshop
-	url = git@github.com:rokroskar/spark_workshop.git
+	url = https://github.com/rokroskar/spark_workshop.git
+
