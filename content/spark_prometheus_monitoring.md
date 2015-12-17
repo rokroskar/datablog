@@ -242,7 +242,7 @@ You can play with the full snapshot [here](https://snapshot.raintank.io/dashboar
 
 If you want to use this dashboard as a template, you can [grab the JSON](https://gist.github.com/rokroskar/1649be3c00bb802289eb) and import it in your own Grafana instance. 
 
-## Future work
+## Conclusion
 
 This is just the beginning of Spark/Prometheus/Grafana integration - next is obviously the collection of Hadoop and system-level metrics. More on this in the next post. 
 
