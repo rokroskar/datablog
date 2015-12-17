@@ -55,7 +55,7 @@ I haven't experimented very much with the visualization front-end but went strai
 
 ## Connecting Spark with Prometheus
 
-<p class="bg-info">**Note:** Before you continue here, make sure your Prometheus instance is running and you can reach it at http://localhost:9090 or whatever other port you configured.</p>
+<p class="alert alert-info"><strong>Note:</strong> Before you continue here, make sure your Prometheus instance is running and you can reach it at http://localhost:9090 or whatever other port you configured.</p>
 
 Spark doesn't have Prometheus as one of the pre-packaged sinks - so the strategy here is to send metrics to Graphite and then feed those into Prometheus. To report metrics to Graphite, you must set up metrics via a `metrics.properties` file. You can put this in `$SPARK_HOME/config` or pass it to spark on the command line. 
 
