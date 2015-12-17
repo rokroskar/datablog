@@ -232,5 +232,3 @@ If you want to use this dashboard, you can [grab the JSON](https://gist.github.c
 ## Future work
 
 This is just the beginning of Spark/Prometheus/Grafana integration - next is obviously the collection of Hadoop and system-level metrics. More on this in the next post. 
-
-
