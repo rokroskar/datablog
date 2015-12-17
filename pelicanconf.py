@@ -56,4 +56,4 @@ working on scalable analysis of large datasets.</p>
 <p>If you want to reach me, <a href="mailto:rokroskar@gmail.com">send an email!</a></p>
 """
 
-#DISQUS_SITENAME = 'rokdatablog'
+DISQUS_SITENAME = 'rokdatablog'
