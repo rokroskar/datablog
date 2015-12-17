@@ -195,11 +195,11 @@ qty=&quot;$4&quot;
 
 
 <p>This instructs the exporter to create a metric named <code>jvm_memory_usage</code> with labels <code>application</code>, <code>executor_id</code>, <code>mem_type</code>, and <code>qty</code>. After we restart the exporter with </p>
-<div class="highlight"><pre>~/graphite_exporter <span class="nv">$ </span>./graphite_exporter -graphite.mapping-config graphite_exporter_mapping
+<div class="highlight"><pre>host:~/graphite_exporter rok$ ./graphite_exporter -graphite.mapping-config graphite_exporter_mapping
 </pre></div>
 
 
-<p>the metrics now look like this: </p>
+<p>and rerun the spark pi example, the metrics now look like this: </p>
 <div class="highlight"><pre>jvm_memory_usage{application=&quot;application_ID&quot;,executor_id=&quot;1&quot;,mem_type=&quot;non-heap&quot;,qty=&quot;committed&quot;} 3.76832e+07
 </pre></div>
 
@@ -263,7 +263,7 @@ scrape_configs:
 
 
 <p>Now restart Prometheus (if it was running already) and it should start collecting metrics from the exporter. Rerun the spark pi example to get some metrics collected. </p>
-<p>Prometheus comes with a simple web UI that should be accessible on http://localhost:9090. This allows you to try out some queries, for example you can enter this query: </p>
+<p>Prometheus comes with a simple web UI that should be accessible on <a href="http://localhost:9090">http://localhost:9090</a>. This allows you to try out some queries, for example you can enter this query: </p>
 <div class="highlight"><pre>jvm_memory_usage{executor_id=&#39;driver&#39;, qty=&#39;used&#39;, application=&quot;local-1450275288942&quot;}
 </pre></div>
 
@@ -280,13 +280,37 @@ scrape_configs:
 <p>In this example I'm using a template variable "application_ID" so that I can easily select the application I want. To define your own, go to the "templating" settings: </p>
 <p><img alt="Templating in Grafana" src="/images/grafana_templating.png" /></p>
 <p><img alt="Templating in Grafana" src="/images/grafana_templating_detail.png" /></p>
-<p>See the <a href="http://docs.grafana.org/datasources/prometheus/">Grafana Prometheus documentsion</a> for more information. </p>
+<p>See the <a href="http://docs.grafana.org/datasources/prometheus/">Grafana Prometheus documentation</a> for more information. </p>
 <p>Finally, a complete dashboard for a single Spark application showing some individual and aggregate Spark metrics may look like this: </p>
 <p><img alt="Full Spark Grafana dashboard" src="/images/grafana_full_spark_dashboard.png" /></p>
-<p>You can see the snapshot <a href="https://snapshot.raintank.io/dashboard/snapshot/kHmB0PX9COdomGLCjA9LE3YhWCLVIXp5">here</a>.</p>
-<p>If you want to use this dashboard, you can <a href="https://gist.github.com/rokroskar/1649be3c00bb802289eb">grab the JSON</a> and import it in your own Grafana instance. </p>
+<p>You can play with the full snapshot <a href="https://snapshot.raintank.io/dashboard/snapshot/kHmB0PX9COdomGLCjA9LE3YhWCLVIXp5">here</a>.</p>
+<p>If you want to use this dashboard as a template, you can <a href="https://gist.github.com/rokroskar/1649be3c00bb802289eb">grab the JSON</a> and import it in your own Grafana instance. </p>
 <h2>Future work</h2>
 <p>This is just the beginning of Spark/Prometheus/Grafana integration - next is obviously the collection of Hadoop and system-level metrics. More on this in the next post. </p>
+<div id="disqus_thread"></div>
+
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+
+var disqus_config = function () {
+this.page.url = http://rokroskar.github.io // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = /drafts/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = '//rokdatablog.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
             </div>
             <!-- /.entry-content -->
         </article>

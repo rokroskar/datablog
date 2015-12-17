@@ -5,6 +5,7 @@ Tags: spark, prometheus, metrics, jvm, graphite, grafana
 Author: Rok
 Summary: Using the Spark metrics system via Prometheus to gain insight into the application performance.    
 
+
 Anyone who has spent time developing [Spark](http://spark.apache.org) applications (or any other distributed application for that matter) has probably wished for some x-ray goggles into the black-box machinery of the framework. While Spark provides a nice and increasingly feature-rich UI for checking on the status of running tasks and even gives statistics on things like runtime, memory usage, disk I/O etc., there are other aspects of the runtime that can remain an annoying mystery: how is the JVM memory being utilized? How much memory is the driver using? What about garbage collection? As it turns out, all these are reported by [Spark's metrics system](http://spark.apache.org/docs/latest/monitoring.html#metrics): *they're out there, you just need to grab them*.
 
 <div class="alert alert-warning">
@@ -126,10 +127,10 @@ qty="$4"
 
 This instructs the exporter to create a metric named `jvm_memory_usage` with labels `application`, `executor_id`, `mem_type`, and `qty`. After we restart the exporter with 
 
-```bash
+```
 host:~/graphite_exporter rok$ ./graphite_exporter -graphite.mapping-config graphite_exporter_mapping
 ```
-the metrics now look like this: 
+and rerun the spark pi example, the metrics now look like this: 
 
 ```
 jvm_memory_usage{application="application_ID",executor_id="1",mem_type="non-heap",qty="committed"} 3.76832e+07
@@ -230,15 +231,15 @@ In this example I'm using a template variable "application_ID" so that I can eas
 
 ![Templating in Grafana]({filename}/images/grafana_templating_detail.png)
 
-See the [Grafana Prometheus documentsion](http://docs.grafana.org/datasources/prometheus/) for more information. 
+See the [Grafana Prometheus documentation](http://docs.grafana.org/datasources/prometheus/) for more information. 
 
 Finally, a complete dashboard for a single Spark application showing some individual and aggregate Spark metrics may look like this: 
 
 ![Full Spark Grafana dashboard]({filename}/images/grafana_full_spark_dashboard.png)
 
-You can see the snapshot [here](https://snapshot.raintank.io/dashboard/snapshot/kHmB0PX9COdomGLCjA9LE3YhWCLVIXp5).
+You can play with the full snapshot [here](https://snapshot.raintank.io/dashboard/snapshot/kHmB0PX9COdomGLCjA9LE3YhWCLVIXp5).
 
-If you want to use this dashboard, you can [grab the JSON](https://gist.github.com/rokroskar/1649be3c00bb802289eb) and import it in your own Grafana instance. 
+If you want to use this dashboard as a template, you can [grab the JSON](https://gist.github.com/rokroskar/1649be3c00bb802289eb) and import it in your own Grafana instance. 
 
 ## Future work
 
@@ -246,3 +247,26 @@ This is just the beginning of Spark/Prometheus/Grafana integration - next is obv
 
 [grafana]: http://grafana.org
 [prometheus]: http://prometheus.io/
+
+<div id="disqus_thread"></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+
+var disqus_config = function () {
+this.page.url = http://rokroskar.github.io // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = /drafts/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+
+s.src = '//rokdatablog.disqus.com/embed.js';
+
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
