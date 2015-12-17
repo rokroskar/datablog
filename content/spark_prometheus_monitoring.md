@@ -194,7 +194,7 @@ scrape_configs:
 
 ...
 
-  - job_name: 'hadoop-test'
+  - job_name: 'spark'
 
     target_groups:
       - targets: ['localhost:9108']
