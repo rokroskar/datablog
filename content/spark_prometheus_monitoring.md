@@ -127,7 +127,7 @@ qty="$4"
 This instructs the exporter to create a metric named `jvm_memory_usage` with labels `application`, `executor_id`, `mem_type`, and `qty`. After we restart the exporter with 
 
 ```bash
-~/graphite_exporter $ ./graphite_exporter -graphite.mapping-config graphite_exporter_mapping
+host:~/graphite_exporter rok$ ./graphite_exporter -graphite.mapping-config graphite_exporter_mapping
 ```
 the metrics now look like this: 
 
@@ -200,7 +200,7 @@ scrape_configs:
 
 Now restart Prometheus (if it was running already) and it should start collecting metrics from the exporter. Rerun the spark pi example to get some metrics collected. 
 
-Prometheus comes with a simple web UI that should be accessible on http://localhost:9090. This allows you to try out some queries, for example you can enter this query: 
+Prometheus comes with a simple web UI that should be accessible on [http://localhost:9090](http://localhost:9090). This allows you to try out some queries, for example you can enter this query: 
 
 ```
 jvm_memory_usage{executor_id='driver', qty='used', application="local-1450275288942"}

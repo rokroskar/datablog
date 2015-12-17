@@ -136,7 +136,7 @@ Data Blog            </a>
 <h4>Scraping vs. pushing metrics</h4>
 <p>With Prometheus you have to define endpoints that it will "scrape" -- it doesn't get any data automatically and clients can't push data to it. This is nice if you want some control over potentially noisy sources. You don't have to alter the source, you can just stop scraping it for input temporarily. </p>
 <h3>Grafana</h3>
-<p>I haven't experimented very much with the visualization front-end but went straight for <a href="http://grafana.org/">Grafana</a>. It was designed to be used with Graphite, but it is now possible to seamlessly insert Prometheus as a data source. Grafana looks good, has nice functionality, and seems fairly general so it seemed like a pretty safe choice. </p>
+<p>I haven't experimented very much with the visualization front-end but went straight for <a href="http://grafana.org">Grafana</a>. It was designed to be used with Graphite, but it is now possible to seamlessly insert Prometheus as a data source. Grafana looks good, has nice functionality, and seems fairly general so it seemed like a pretty safe choice. </p>
 <h2>Connecting Spark with Prometheus</h2>
 <p class="alert alert-info"><strong>Note:</strong> Before you continue here, make sure your Prometheus instance is running and you can reach it at <a href="http://localhost:9090">http://localhost:9090</a> or whatever other port you configured.</p>
 
@@ -160,7 +160,7 @@ executor.source.jvm.class=org.apache.spark.metrics.source.JvmSource
 
 
 <p>Spark's monitoring sinks include Graphite, but not Prometheus. Luckily it's really easy to get Graphite data into Prometheus using the <a href="https://github.com/prometheus/graphite_exporter">Graphite Exporter</a>, which you can easily get running either by building from source or using the Docker image. Once it's up, all you need to do is change the port to which your Graphite clients (i.e. Spark in this case) are sending their metrics and you're set -- the default port is 9109 so make sure you set that in your <code>metrics.properties</code> file. </p>
-<p>You can go to <a href="http://localhost:9108/metrics">http://localhost:9108/metrics</a> once the exporter is running to see which metrics it has collected - initially it will only have some internal metrics. To get spark metrics in there, make sure you set up the <code>metrics.properties</code> file and try running just the simply pi script:</p>
+<p>You can go to <a href="http://localhost:9108/metrics">http://localhost:9108/metrics</a> once the exporter is running to see which metrics it has collected - initially it will only have some internal metrics. To get spark metrics in there, make sure you set up the <code>metrics.properties</code> file and try running the spark pi example:</p>
 <div class="highlight"><pre><span class="nv">$ $SPARK_HOME</span>/bin/spark-submit  --master <span class="nb">local</span><span class="o">[</span>*<span class="o">]</span> <span class="nv">$SPARK_HOME</span>/examples/src/main/python/pi.py 500
 </pre></div>
 
@@ -181,15 +181,7 @@ local_driver_jvm_heap_used 3.60397752e+08
 </pre></div>
 
 
-<p>This is showing us that the forwarding between works, but by default all Graphite metrics are sent across just as 1D metrics to Prometheus, i.e. without any label dimensions. To get the data into the Prometheus data model, we have to set up a mapping. </p>
-<p>The final thing we need to do is to tell Prometheus to scrape our Graphite exporter for data. We do this by adding a job to <code>prometheus.yml</code> below the internal <code>prometheus</code> job declaration: </p>
-<div class="highlight"><pre>  - job_name: &#39;hadoop-test&#39;
-
-    target_groups:
-      - targets: [&#39;localhost:9108&#39;]
-</pre></div>
-
-
+<p>This is showing us that the Graphite exporter to Prometheus works, but by default all Graphite metrics are sent across just as 1D metrics to Prometheus, i.e. without any label dimensions. To get the data into the Prometheus data model, we have to set up a mapping. </p>
 <h3>Mapping Spark's Graphite metrics to Prometheus</h3>
 <p>The one trick here is that if you just send raw Graphite metrics to Prometheus, you will not be able to use the nice Prometheus query language to its fullest because the metrics data will not have labels.</p>
 <p>You can easily define mappings to turn these into proper Prometheus labeled metrics by specifying a mapping config file. Turning these JVM memory metrics into Prometheus metrics can be done with something like this: </p>
@@ -256,6 +248,21 @@ qty=&quot;$2&quot;
 
 
 <h2>Exploring metrics in Prometheus</h2>
+<p>To actually see our Spark metrics in Prometheus, we need to tell it to scrape the graphite exporter for data. We do this by adding a job to <code>prometheus.yml</code> below the internal <code>prometheus</code> job declaration: </p>
+<div class="highlight"><pre>...
+
+scrape_configs:
+
+...
+
+  - job_name: &#39;hadoop-test&#39;
+
+    target_groups:
+      - targets: [&#39;localhost:9108&#39;]
+</pre></div>
+
+
+<p>Now restart Prometheus (if it was running already) and it should start collecting metrics from the exporter. Rerun the spark pi example to get some metrics collected. </p>
 <p>Prometheus comes with a simple web UI that should be accessible on http://localhost:9090. This allows you to try out some queries, for example you can enter this query: </p>
 <div class="highlight"><pre>jvm_memory_usage{executor_id=&#39;driver&#39;, qty=&#39;used&#39;, application=&quot;local-1450275288942&quot;}
 </pre></div>
@@ -263,7 +270,7 @@ qty=&quot;$2&quot;
 
 <p>but replace the application identifier with your actual application ID and see the values reported back in the "Console" tab or the plot. </p>
 <p><img alt="Basic Prometheus plot" src="/images/basic_prometheus.png" /></p>
-<p>This is nice to get a first look at your data, but for some sort of user-friendly metrics tracking, we'll want to set up Grafana. </p>
+<p>This is nice to get a first look at your data, but for some sort of user-friendly metrics tracking, we'll want to set up <a href="http://grafana.org">Grafana</a>. </p>
 <h2>Using Grafana to Visualize Spark metrics via Prometheus</h2>
 <p>First, <a href="http://grafana.org/download/">download Grafana</a> or use their <a href="http://docs.grafana.org/installation/docker/">Docker container</a>. I found that the build was breaking in ways I wasn't able to debug very quickly so I resorted to using the Docker container for the purposes of testing. </p>
 <p>Once Grafana is running, set up the Prometheus data source:</p>
