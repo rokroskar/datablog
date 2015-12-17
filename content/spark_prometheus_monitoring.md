@@ -3,7 +3,7 @@ Date: 2015-12-16
 Category: spark
 Tags: spark, prometheus, metrics, jvm, graphite, grafana
 Author: Rok
-Summary: Using the Spark metrics system via Prometheus to gain insight into the application performance. 	
+Summary: Using the Spark metrics system via Prometheus to gain insight into the application performance.    
 
 Anyone who has spent time developing [Spark](http://spark.apache.org) applications (or any other distributed application for that matter) has probably wished for some x-ray goggles into the black-box machinery of the framework. While Spark provides a nice and increasingly feature-rich UI for checking on the status of running tasks and even gives statistics on things like runtime, memory usage, disk I/O etc., there are other aspects of the runtime that can remainan annoying mystery: how is the JVM memory being utilized? How much memory is the driver using? What about garbage collection? As it turns out, all these are reported by [Spark's metrics system](http://spark.apache.org/docs/latest/monitoring.html#metrics): they're out there, you just need to grab them. 
 
@@ -226,6 +226,8 @@ Finally, a complete dashboard for a single Spark application showing some indivi
 ![Full Spark Grafana dashboard]({filename}/images/grafana_full_spark_dashboard.png)
 
 You can see the snapshot [here](https://snapshot.raintank.io/dashboard/snapshot/kHmB0PX9COdomGLCjA9LE3YhWCLVIXp5).
+
+If you want to use this dashboard, you can [grab the JSON](https://gist.github.com/rokroskar/1649be3c00bb802289eb) and import it in your own Grafana instance. 
 
 ## Future work
 
