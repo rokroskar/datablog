@@ -26,9 +26,9 @@ The second is slightly more complex - we are running a 250+ node "test" Spark/Ha
 
 ### Graphite
 
-The widely-adopted general-purpose monitoring choice seems to be [Graphite](http://graphite.readthedocs.org/en/1.0/overview.html). I found it very difficult to set up, owing to inconsistent documentation (for example, the top google hit for ["graphite monitoring"](https://www.google.ch/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=graphite%20monitoring) takes you to outdated docs) and many components that need to play nice together. I spent a day configuring graphite/carbon and had a working system after some headache. When I needed to add Grafana on top of this, I quickly reached for a [Vagrant VM set up](https://github.com/pellepelster/graphite-grafana-vagrant-box) that worked pretty well, but I didn't want to rely on a Vagrant image when I actually tried to deploy this downstream. 
+The widely-adopted general-purpose monitoring choice seems to be [Graphite](http://graphite.readthedocs.org/en/1.0/overview.html). I found it very difficult to set up, owing to inconsistent documentation (for example, the top google hit for ["graphite monitoring"](https://www.google.ch/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=graphite%20monitoring) takes you to outdated docs) and many components that need to play nice together. I spent a day configuring graphite/carbon and had a working system after some headache. When I needed to add Grafana on top of this, I quickly reached for a [Vagrant VM setup](https://github.com/pellepelster/graphite-grafana-vagrant-box) that worked very well, but I didn't want to rely on a Vagrant image when I actually tried to deploy this later. 
 
-In addition, the built-in Graphite UI is pretty basic at best. The plotting is rather cumbersome and outdated, though I'm sure it's possible to set up nice dashboards with some effort. 
+In addition, the built-in Graphite UI is pretty basic at best. The plotting is rather cumbersome and outdated, though I'm sure it's possible to set up nice dashboards with some effort. Still, it was very useful as an initial metrics browser, just to get a feeling for what is being reported. 
 
 ### Prometheus
 
