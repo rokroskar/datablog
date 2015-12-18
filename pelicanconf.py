@@ -23,10 +23,6 @@ AUTHOR_FEED_RSS = None
 # Blogroll
 #LINKS = ('#'),)
 
-# Social widget
-#SOCIAL = (('You can add links in your config file', '#'),
-#          ('Another social link', '#'),)
-
 DEFAULT_PAGINATION = 10
 
 DEFAULT_METADATA = {'status': 'draft', }
