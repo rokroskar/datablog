@@ -45,7 +45,6 @@ DISPLAY_CATEGORIES_ON_MENU = False
 DISPLAY_TAGS_ON_SIDEBAR = False
 
 SOCIAL = (('twitter', 'http://twitter.com/rokstars'),
-          ('linkedin', 'https://www.linkedin.com/in/rok-roskar-0702932b'),
           ('github', 'http://github.com/rokroskar'),)
 
 CC_LICENSE = "CC-BY-NC"
