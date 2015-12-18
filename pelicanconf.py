@@ -23,10 +23,6 @@ AUTHOR_FEED_RSS = None
 # Blogroll
 #LINKS = ('#'),)
 
-# Social widget
-#SOCIAL = (('You can add links in your config file', '#'),
-#          ('Another social link', '#'),)
-
 DEFAULT_PAGINATION = 10
 
 DEFAULT_METADATA = {'status': 'draft', }
@@ -46,7 +42,6 @@ DISPLAY_CATEGORIES_ON_MENU = False
 DISPLAY_TAGS_ON_SIDEBAR = False
 
 SOCIAL = (('twitter', 'http://twitter.com/rokstars'),
-          ('linkedin', 'https://www.linkedin.com/in/rok-roskar-0702932b'),
           ('github', 'http://github.com/rokroskar'),)
 
 CC_LICENSE = "CC-BY-NC"
