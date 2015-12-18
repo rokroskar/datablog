@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Rok Roškar'
 SITENAME = u'Data Blog'
-SITEURL = ''
+SITEURL = 'http://rokroskar.github.io'
+DISQUS_SITENAME = 'rokdatablog'
 
 PATH = 'content'
 
@@ -49,8 +50,4 @@ SOCIAL = (('twitter', 'http://twitter.com/rokstars'),
 
 CC_LICENSE = "CC-BY-NC"
 
-ABOUT_ME = """
-<p>I am a scientific computing consultant at <a href="https://sis.id.ethz.ch/">ETH Zürich</a>, 
-working on scalable analysis of large datasets.</p>
-<p>If you want to reach me, <a href="mailto:rokroskar@gmail.com">send an email!</a></p>
-"""
+
