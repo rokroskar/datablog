@@ -10,7 +10,7 @@
 
 
 
-<link rel="canonical" href="http://rokroskar.github.io/drafts/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html">
+<link rel="canonical" href="http://rokroskar.github.io/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html">
 
         <meta name="author" content="Rok" />
         <meta name="keywords" content="spark,prometheus,metrics,jvm,graphite,grafana" />
@@ -19,7 +19,7 @@
         <meta property="og:site_name" content="Data Blog" />
         <meta property="og:type" content="article"/>
         <meta property="og:title" content="Monitoring Spark on Hadoop with Prometheus and Grafana"/>
-        <meta property="og:url" content="http://rokroskar.github.io/drafts/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html"/>
+        <meta property="og:url" content="http://rokroskar.github.io/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html"/>
         <meta property="og:description" content="Using the Spark metrics system via Prometheus to gain insight into the application performance."/>
         <meta property="article:published_time" content="2015-12-16" />
             <meta property="article:section" content="spark" />
@@ -39,6 +39,8 @@
     <link href="http://rokroskar.github.io/theme/css/pygments/native.css" rel="stylesheet">
     <link rel="stylesheet" href="http://rokroskar.github.io/theme/css/style.css" type="text/css"/>
 
+        <link href="http://rokroskar.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+              title="Data Blog ATOM Feed"/>
 
 </head>
 <body>
@@ -78,7 +80,7 @@ Data Blog            </a>
         <article>
             <header class="page-header">
                 <h1>
-                    <a href="http://rokroskar.github.io/drafts/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html"
+                    <a href="http://rokroskar.github.io/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html"
                        rel="bookmark"
                        title="Permalink to Monitoring Spark on Hadoop with Prometheus and Grafana">
                         Monitoring Spark on Hadoop with Prometheus and Grafana
@@ -145,7 +147,7 @@ Data Blog            </a>
 
 <p>Spark doesn't have Prometheus as one of the pre-packaged sinks - so the strategy here is to ask Spark to export Graphite metrics and feed those into Prometheus via an exporter plugin. To report metrics to Graphite, you must set up metrics via a <code>metrics.properties</code> file. You can put this in <code>$SPARK_HOME/config</code> or pass it to spark on the command line by using  <code>--conf spark.metrics.conf=/path/to/metrics/file</code> - beware that this path must either exist on all executors. Alternatively you can pass the file to the executors using the <code>--file</code> flag. </p>
 <p>My <code>metrics.properties</code> looks like this: </p>
-<div class="highlight"><pre>*.sink.graphite.class=org.apache.spark.metrics.sink.GraphiteSink
+<div class="highlight"><pre><span></span>*.sink.graphite.class=org.apache.spark.metrics.sink.GraphiteSink
 *.sink.graphite.host=&lt;metrics_hostname&gt;
 *.sink.graphite.port=&lt;metrics_port&gt;
 *.sink.graphite.period=5
@@ -164,12 +166,12 @@ executor.source.jvm.class=org.apache.spark.metrics.source.JvmSource
 
 <p>Spark's monitoring sinks include Graphite, but not Prometheus. Luckily it's really easy to get Graphite data into Prometheus using the <a href="https://github.com/prometheus/graphite_exporter">Graphite Exporter</a>, which you can easily get running either by building from source or using the Docker image. Once it's up, all you need to do is change the port to which your Graphite clients (i.e. Spark in this case) are sending their metrics and you're set -- the default port is 9109 so make sure you set that in your <code>metrics.properties</code> file. </p>
 <p>You can go to <a href="http://localhost:9108/metrics">http://localhost:9108/metrics</a> once the exporter is running to see which metrics it has collected - initially it will only have some internal metrics. To get spark metrics in there, make sure you set up the <code>metrics.properties</code> file and try running the spark pi example:</p>
-<div class="highlight"><pre><span class="nv">$ $SPARK_HOME</span>/bin/spark-submit  --master <span class="nb">local</span><span class="o">[</span>*<span class="o">]</span> <span class="nv">$SPARK_HOME</span>/examples/src/main/python/pi.py 500
+<div class="highlight"><pre><span></span>$ <span class="nv">$SPARK_HOME</span>/bin/spark-submit  --master local<span class="o">[</span>*<span class="o">]</span> <span class="nv">$SPARK_HOME</span>/examples/src/main/python/pi.py 500
 </pre></div>
 
 
 <p>On the http://localhost:9108/metrics you should now see a ton of lines like this: </p>
-<div class="highlight"><pre># HELP local_driver_jvm_heap_init Graphite metric local.driver.jvm.heap.init
+<div class="highlight"><pre><span></span># HELP local_driver_jvm_heap_init Graphite metric local.driver.jvm.heap.init
 # TYPE local_driver_jvm_heap_init gauge
 local_driver_jvm_heap_init 1.073741824e+09
 # HELP local_driver_jvm_heap_max Graphite metric local-1450274266632.driver.jvm.heap.max
@@ -188,7 +190,7 @@ local_driver_jvm_heap_used 3.60397752e+08
 <h3>Mapping Spark's Graphite metrics to Prometheus</h3>
 <p>The one trick here is that if you just send raw Graphite metrics to Prometheus, you will not be able to use the nice Prometheus query language to its fullest because the metrics data will not have labels.</p>
 <p>You can easily define mappings to turn these into proper Prometheus labeled metrics by specifying a mapping config file. Turning these JVM memory metrics into Prometheus metrics can be done with something like this: </p>
-<div class="highlight"><pre>*.*.jvm.*.*
+<div class="highlight"><pre><span></span>*.*.jvm.*.*
 name=&quot;jvm_memory_usage&quot;
 application=&quot;$1&quot;
 executor_id=&quot;$2&quot;
@@ -198,18 +200,18 @@ qty=&quot;$4&quot;
 
 
 <p>This instructs the exporter to create a metric named <code>jvm_memory_usage</code> with labels <code>application</code>, <code>executor_id</code>, <code>mem_type</code>, and <code>qty</code>. After we restart the exporter with </p>
-<div class="highlight"><pre>host:~/graphite_exporter rok$ ./graphite_exporter -graphite.mapping-config graphite_exporter_mapping
+<div class="highlight"><pre><span></span>host:~/graphite_exporter rok$ ./graphite_exporter -graphite.mapping-config graphite_exporter_mapping
 </pre></div>
 
 
 <p>and rerun the spark pi example, the metrics now look like this: </p>
-<div class="highlight"><pre>jvm_memory_usage{application=&quot;application_ID&quot;,executor_id=&quot;1&quot;,mem_type=&quot;non-heap&quot;,qty=&quot;committed&quot;} 3.76832e+07
+<div class="highlight"><pre><span></span>jvm_memory_usage{application=&quot;application_ID&quot;,executor_id=&quot;1&quot;,mem_type=&quot;non-heap&quot;,qty=&quot;committed&quot;} 3.76832e+07
 </pre></div>
 
 
 <p>Great, now we can actually use Prometheus queries on our data!</p>
 <p>Here is my full graphite exporter mappings file that will turn Spark Graphite metrics into something usable in Prometheus: </p>
-<div class="highlight"><pre>*.*.executor.filesystem.*.*
+<div class="highlight"><pre><span></span>*.*.executor.filesystem.*.*
 name=&quot;filesystem_usage&quot;
 application=&quot;$1&quot;
 executor_id=&quot;$2&quot;
@@ -252,13 +254,13 @@ qty=&quot;$2&quot;
 
 <h2>Exploring metrics in Prometheus</h2>
 <p>To actually see our Spark metrics in Prometheus, we need to tell it to scrape the graphite exporter for data. We do this by adding a job to <code>prometheus.yml</code> below the internal <code>prometheus</code> job declaration: </p>
-<div class="highlight"><pre>...
+<div class="highlight"><pre><span></span>...
 
 scrape_configs:
 
 ...
 
-  - job_name: &#39;hadoop-test&#39;
+  - job_name: &#39;spark&#39;
 
     target_groups:
       - targets: [&#39;localhost:9108&#39;]
@@ -267,7 +269,7 @@ scrape_configs:
 
 <p>Now restart Prometheus (if it was running already) and it should start collecting metrics from the exporter. Rerun the spark pi example to get some metrics collected. </p>
 <p>Prometheus comes with a simple web UI that should be accessible on <a href="http://localhost:9090">http://localhost:9090</a>. This allows you to try out some queries, for example you can enter this query: </p>
-<div class="highlight"><pre>jvm_memory_usage{executor_id=&#39;driver&#39;, qty=&#39;used&#39;, application=&quot;local-1450275288942&quot;}
+<div class="highlight"><pre><span></span>jvm_memory_usage{executor_id=&#39;driver&#39;, qty=&#39;used&#39;, application=&quot;local-1450275288942&quot;}
 </pre></div>
 
 
@@ -288,7 +290,7 @@ scrape_configs:
 <p><img alt="Full Spark Grafana dashboard" src="http://rokroskar.github.io/images/grafana_full_spark_dashboard.png" /></p>
 <p>You can play with the full snapshot <a href="https://snapshot.raintank.io/dashboard/snapshot/kHmB0PX9COdomGLCjA9LE3YhWCLVIXp5">here</a>.</p>
 <p>If you want to use this dashboard as a template, you can <a href="https://gist.github.com/rokroskar/1649be3c00bb802289eb">grab the JSON</a> and import it in your own Grafana instance. </p>
-<h2>Future work</h2>
+<h2>Conclusion</h2>
 <p>This is just the beginning of Spark/Prometheus/Grafana integration - next is obviously the collection of Hadoop and system-level metrics. More on this in the next post. </p>
             </div>
             <!-- /.entry-content -->
@@ -302,7 +304,7 @@ scrape_configs:
             var disqus_shortname = 'rokdatablog'; // required: replace example with your forum shortname
 
                     var disqus_identifier = 'monitoring-spark-on-hadoop-with-prometheus-and-grafana';
-                var disqus_url = 'http://rokroskar.github.io/drafts/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html';
+                var disqus_url = 'http://rokroskar.github.io/monitoring-spark-on-hadoop-with-prometheus-and-grafana.html';
 
             var disqus_config = function () {
                 this.language = "en";
@@ -334,7 +336,6 @@ scrape_configs:
             <li class="list-group-item"><h4><i class="fa fa-home fa-lg"></i><span class="icon-label">Social</span></h4>
               <ul class="list-group" id="social">
                 <li class="list-group-item"><a href="http://twitter.com/rokstars"><i class="fa fa-twitter-square fa-lg"></i> twitter</a></li>
-                <li class="list-group-item"><a href="https://www.linkedin.com/in/rok-roskar-0702932b"><i class="fa fa-linkedin-square fa-lg"></i> linkedin</a></li>
                 <li class="list-group-item"><a href="http://github.com/rokroskar"><i class="fa fa-github-square fa-lg"></i> github</a></li>
               </ul>
             </li>
@@ -351,7 +352,7 @@ scrape_configs:
    <div class="container">
       <hr>
       <div class="row">
-         <div class="col-xs-10">&copy;  Rok Roškar
+         <div class="col-xs-10">&copy; 2015 Rok Roškar
             &middot; Powered by <a href="https://github.com/DandyDev/pelican-bootstrap3" target="_blank">pelican-bootstrap3</a>,
             <a href="http://docs.getpelican.com/" target="_blank">Pelican</a>,
             <a href="http://getbootstrap.com" target="_blank">Bootstrap</a>              <p><small>  <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-nc/4.0/80x15.png" /></a>
