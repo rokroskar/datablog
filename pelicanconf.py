@@ -49,3 +49,8 @@ CC_LICENSE = "CC-BY-NC"
 STATCOUNTER = True
 SC_PROJECT = '10768005'
 SC_SECURITY = u"6a99d186"
+
+MARKUP = ('md', 'ipynb')
+PLUGIN_PATHS = ['./plugins']
+PLUGINS = ['ipynb.markup']
+
